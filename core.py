@@ -1,6 +1,6 @@
 # Code presenter core
 # by Hwoai#0593
-# 17th April 2022
+# 17 - 18 April 2022
 
 from PIL import Image
 from pygments import highlight
@@ -56,27 +56,27 @@ class core:
         self.display = self.display.resize((round(self.display.size[0]*0.5), round(self.display.size[1]*0.5)))
         self.display.save('display.png')
 
-    def export(self, option, name, filepath):
-        self.option = option
+    def exportHtml(self, name, filepath):
         self.name = name
         self.filepath = filepath
 
-        if self.option == 'html':
-            with open(self.filepath + self.name + '.html', 'w') as self.f:
-                self.f.write(self.html)
-        elif self.option == 'png':
-            Html2Image().screenshot(html_str=self.html, save_as=self.name + '.png', size=(self.imgLen, self.imgWidth))
+        with open(self.filepath + self.name + '.html', 'w') as self.f:
+            self.f.write(self.html)
+
+    def exportPNG(self, name, filepath):
+        self.name = name
+        self.filepath = filepath
+
+        Html2Image().screenshot(html_str=self.html, save_as=self.name + '.png', size=(self.imgLen, self.imgWidth))
             
-            # * Move file or python will complain
+        # * Move file or python will complain
 
-            os.replace(self.name + '.png', self.filepath + self.name + '.png')
+        os.replace(self.name + '.png', self.filepath + self.name + '.png')
 
-            self.display = Image.open(self.filepath + self.name + '.png')
-            self.display = self.display.crop(self.display.getbbox())
-            self.display.crop((0, 0, self.imgLen, 0))
-            self.display.save(self.filepath + self.name + '.png')
-        else:
-            return
+        self.display = Image.open(self.filepath + self.name + '.png')
+        self.display = self.display.crop(self.display.getbbox())
+        self.display.crop((0, 0, self.imgLen, 0))
+        self.display.save(self.filepath + self.name + '.png')
 
     def getHtml(self):
         return self.html

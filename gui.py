@@ -58,8 +58,10 @@ def exportFile():
     fontSize = int(fontSizeBox.text())
     showNumLines = checkboxShowNums.isChecked()
     imageRenderer = core(code, lexer, theme, font, fontSize, showNumLines)
-    imageRenderer.drawImage()
-    imageRenderer.export(choice, name, filePath)
+    if choice == 'png':
+        imageRenderer.exportPNG(name, filePath)
+    if choice == 'html':
+        imageRenderer.exportHtml(name, filePath)
     print('Exported file')
 
 # * ANCHOR Settings 
