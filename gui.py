@@ -46,7 +46,7 @@ def exportFile():
     if filePath.strip() == '/':
         labelFilePath.setText('Empty file path.')
         return
-    if filePath.strip() == '    ':
+    if filePath.strip() == '':
         labelFilePath.setText('Empty file path.')
         return
     code = codeBox.text()
