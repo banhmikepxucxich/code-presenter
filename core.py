@@ -37,7 +37,7 @@ class core:
         self.formatter = HtmlFormatter(style=self.theme, full=True, linenos=self.showNumbers)
         self.html = highlight(self.code, self.lexer, self.formatter)
 
-    def drawImage(self):
+    def drawImage(self): # ! No longer used
         self.codeList = self.code.splitlines()
         self.codeListLen = []
 
@@ -70,3 +70,8 @@ class core:
             self.display = self.display.crop(self.display.getbbox())
             self.display.crop((0, 0, self.imgLen, 0))
             self.display.save(self.filepath + self.name + '.png')
+        else:
+            return
+
+    def getHtml(self):
+        return self.html
