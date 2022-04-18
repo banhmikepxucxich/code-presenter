@@ -5,7 +5,7 @@
 from pygments.lexers import get_lexer_by_name, get_all_lexers
 from pygments.styles import get_style_by_name, get_all_styles
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout
-from PyQt6.QtWidgets import QLabel, QPushButton, QLineEdit, QComboBox, QFileDialog
+from PyQt6.QtWidgets import QLabel, QPushButton, QLineEdit, QComboBox, QFileDialog, QCheckBox
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtCore import Qt, QSize
 
@@ -24,7 +24,8 @@ def renderPreview():
     lexer = get_lexer_by_name(langDropdown.currentText().lower())
     theme = get_style_by_name(themeDropdown.currentText().lower())
     font = 'JetBrains Mono' # will change later
-    htmlProcessing = core(code, lexer, theme, font, 14, True)
+    showNumLines = checkboxShowNums.isChecked()
+    htmlProcessing = core(code, lexer, theme, font, 14, showNumLines)
     codeBlock.setHtml(htmlProcessing.getHtml())
 
 def filePathDialog():
@@ -84,7 +85,7 @@ subMainLayout.addLayout(settingsLayout)
 subMainLayout.addLayout(rendererLayout)
 mainLayout.addLayout(exportLayout)
 
-# * ANCHOR Widgets
+# * ANCHOR Settings widgets
 
 labelCode = QLabel('Code (Paste code here)')
 labelCode.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
@@ -120,8 +121,17 @@ theme = list(get_all_styles())
 themeDropdown.addItems(theme)
 settingsLayout.addWidget(themeDropdown)
 
+checkboxShowNums = QCheckBox('   Show Number Lines')
+checkboxShowNums.clicked.connect(renderPreview)
+checkboxShowNums.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
+settingsLayout.addWidget(checkboxShowNums)
+
+# * ANCHOR Render Widget
+
 codeBlock = QWebEngineView()
 rendererLayout.addWidget(codeBlock)
+
+# * ANCHOR Export Widgets
 
 labelFileName = QLabel('File Name')
 labelFileName.setMaximumWidth(exportLayoutMaxWidth)
