@@ -54,9 +54,12 @@ def exportFile():
     theme = get_style_by_name(themeDropdown.currentText().lower())
     font = 'JetBrains Mono' # will change later
     choice = typeDropdown.currentText()
-    imageRenderer = core(code, lexer, theme, font, 14, True)
+    name = fileNameBox.text()
+    fontSize = int(fontSizeBox.text())
+    showNumLines = checkboxShowNums.isChecked()
+    imageRenderer = core(code, lexer, theme, font, fontSize, showNumLines)
     imageRenderer.drawImage()
-    imageRenderer.export(choice, 'example_output', filePath)
+    imageRenderer.export(choice, name, filePath)
     print('Exported file')
 
 # * ANCHOR Settings 
