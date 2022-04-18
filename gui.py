@@ -2,12 +2,14 @@
 # by Hwoai#0593 on discord
 # 17 - 18 April 2022
 
+from PyQt6.QtWidgets import QLabel, QPushButton, QLineEdit, QComboBox, QFileDialog, QCheckBox
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PyQt6.QtGui import QIntValidator
+from PyQt6.QtCore import QSize
+
 from pygments.lexers import get_lexer_by_name, get_all_lexers
 from pygments.styles import get_style_by_name, get_all_styles
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout
-from PyQt6.QtWidgets import QLabel, QPushButton, QLineEdit, QComboBox, QFileDialog, QCheckBox
-from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtCore import Qt, QSize
 
 from core import core
 
@@ -20,12 +22,15 @@ def exitHandler():
 def renderPreview():
     if codeBox.text().strip() == '':
         return
+    if fontSizeBox.text() == '':
+        return
     code = codeBox.text()
     lexer = get_lexer_by_name(langDropdown.currentText().lower())
     theme = get_style_by_name(themeDropdown.currentText().lower())
     font = 'JetBrains Mono' # will change later
+    fontSize = int(fontSizeBox.text())
     showNumLines = checkboxShowNums.isChecked()
-    htmlProcessing = core(code, lexer, theme, font, 14, showNumLines)
+    htmlProcessing = core(code, lexer, theme, font, fontSize, showNumLines)
     codeBlock.setHtml(htmlProcessing.getHtml())
 
 def filePathDialog():
@@ -108,6 +113,7 @@ langlist = []
 for i in range(len(lang)):
     langlist.append(lang[i][0])
 langDropdown.addItems(langlist)
+langDropdown.setCurrentText('Python')
 settingsLayout.addWidget(langDropdown)
 
 labelTheme = QLabel('Theme')
@@ -119,12 +125,24 @@ themeDropdown.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeig
 themeDropdown.currentTextChanged.connect(renderPreview)
 theme = list(get_all_styles())
 themeDropdown.addItems(theme)
+themeDropdown.setCurrentText('one-dark')
 settingsLayout.addWidget(themeDropdown)
 
 checkboxShowNums = QCheckBox('   Show Number Lines')
 checkboxShowNums.clicked.connect(renderPreview)
 checkboxShowNums.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
 settingsLayout.addWidget(checkboxShowNums)
+
+labelFontSize = QLabel('Font Size')
+labelFontSize.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
+settingsLayout.addWidget(labelFontSize)
+
+fontSizeBox = QLineEdit()
+fontSizeBox.textChanged.connect(renderPreview)
+fontSizeBox.setValidator(QIntValidator())
+fontSizeBox.setText('12') # Default
+fontSizeBox.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
+settingsLayout.addWidget(fontSizeBox)
 
 # * ANCHOR Render Widget
 
@@ -159,6 +177,11 @@ exportButton = QPushButton('Export')
 exportButton.setMaximumWidth(exportLayoutMaxWidth)
 exportButton.clicked.connect(exportFile)
 exportLayout.addWidget(exportButton)
+
+# * Base settings
+
+codeBox.setText("""def somefunc(param1, param2):
+    print(f'param1: {0}, param2: {1}').format(param1, param2)""")
 
 window.setLayout(mainLayout)
 window.show()
