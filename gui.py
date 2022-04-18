@@ -2,6 +2,7 @@
 # by Hwoai#0593
 # 17th April 2022
 
+from discord import option
 from pygments.lexers import get_lexer_by_name, get_all_lexers
 from pygments.styles import get_style_by_name, get_all_styles
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout
@@ -62,23 +63,28 @@ def filePathDialog():
 
 def exportFile():
     if codeBox.text().strip() == '':
-        labelFilePath.setText('Please select a filepath first.')
+        labelFilePath.setText('Empty CodeBox.')
+        return
+    if filePath.strip() == '/':
+        labelFilePath.setText('Empty file path.')
         return
     if filePath.strip() == '':
-        labelFilePath.setText('Empty CodeBox.')
+        labelFilePath.setText('Empty file path.')
         return
     code = codeBox.text()
     lexer = get_lexer_by_name(langDropdown.currentText().lower())
     theme = get_style_by_name(themeDropdown.currentText().lower())
     font = 'JetBrains Mono' # will change later
+    choice = typeDropdown.currentText()
     imageRenderer = core(code, lexer, theme, font, 14, True)
     imageRenderer.drawImage()
-    imageRenderer.export('png', 'example_output', filePath)
+    imageRenderer.export(choice, 'example_output', filePath)
     print('Exported file')
 
 settingsLayoutMaxWidth = 175
 exportLayoutMaxWidth = 175
 slash = '/' # or \\ if you're a windows user
+filePath = ''
 
 app = QApplication([])
 app.aboutToQuit.connect(exitHandler)

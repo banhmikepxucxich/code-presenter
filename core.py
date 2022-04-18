@@ -44,8 +44,8 @@ class core:
         for i in range(len(self.codeList)):
             self.codeListLen.append(len(self.codeList[i]))
 
-        self.imgLen = math.ceil((max(self.codeListLen) * self.fontSize) * (2/3))
-        self.imgWidth = math.ceil((len(self.codeList) * self.fontSize * 1.25) + 5)
+        self.imgLen = math.ceil((max(self.codeListLen) * self.fontSize) * (7/10))
+        self.imgWidth = math.ceil((len(self.codeList) * self.fontSize * 1.3) + self.fontSize + 5)
 
         Html2Image().screenshot(html_str=self.html, save_as='display.png', size=(self.imgLen, self.imgWidth))
 
@@ -61,12 +61,12 @@ class core:
         self.filepath = filepath
 
         if self.option == 'html':
-            with open(name + '.html', 'w') as self.f:
+            with open(self.filepath + self.name + '.html', 'w') as self.f:
                 self.f.write(self.html)
         elif self.option == 'png':
-            Html2Image().screenshot(html_str=self.html, save_as=self.name + '.png', size=(self.imgLen, self.imgWidth))
+            Html2Image().screenshot(html_str=self.html, save_as=self.filepath + self.name + '.png', size=(self.imgLen, self.imgWidth))
 
             self.display = Image.open(self.name + '.png')
             self.display = self.display.crop(self.display.getbbox())
             self.display.crop((0, 0, self.imgLen, 0))
-            self.display.save(filepath + self.name + '.png')
+            self.display.save(self.filepath + self.name + '.png')
