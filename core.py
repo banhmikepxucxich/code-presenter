@@ -9,6 +9,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.style import Style
 from html2image import Html2Image
 
+import os
 import math
 
 class core:
@@ -64,9 +65,13 @@ class core:
             with open(self.filepath + self.name + '.html', 'w') as self.f:
                 self.f.write(self.html)
         elif self.option == 'png':
-            Html2Image().screenshot(html_str=self.html, save_as=self.filepath + self.name + '.png', size=(self.imgLen, self.imgWidth))
+            Html2Image().screenshot(html_str=self.html, save_as=self.name + '.png', size=(self.imgLen, self.imgWidth))
+            
+            # * Move file or python will complain
 
-            self.display = Image.open(self.name + '.png')
+            os.replace(self.name + '.png', self.filepath + self.name + '.png')
+
+            self.display = Image.open(self.filepath + self.name + '.png')
             self.display = self.display.crop(self.display.getbbox())
             self.display.crop((0, 0, self.imgLen, 0))
             self.display.save(self.filepath + self.name + '.png')
