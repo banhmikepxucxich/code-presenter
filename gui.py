@@ -113,10 +113,20 @@ settingsLayout.addWidget(labelLang)
 langDropdown = QComboBox()
 langDropdown.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
 langDropdown.currentTextChanged.connect(renderPreview)
-lang = list(get_all_lexers())
+# lang = list(get_all_lexers())
+# langlist = []
+# for i in range(len(lang)):
+#     langlist.append(lang[i][0])
 langlist = []
-for i in range(len(lang)):
-    langlist.append(lang[i][0])
+with open('Supported.txt', 'r') as supported:
+    for line in supported:
+        if line.startswith('#'):
+            pass
+        else:
+            if line.strip() == '':
+                pass
+            else:
+                langlist.append(line.strip())
 langDropdown.addItems(langlist)
 langDropdown.setCurrentText('Python')
 settingsLayout.addWidget(langDropdown)
