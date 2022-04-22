@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QLabel, QPushButton, QLineEdit, QComboBox, QFileDial
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtGui import QIntValidator, QFontDatabase, QFont, QFontMetricsF
-from PyQt6.QtCore import QSize
+from PyQt6.QtCore import QSize, Qt
 
 from pygments.lexers import get_lexer_by_name, get_all_lexers
 from pygments.styles import get_style_by_name, get_all_styles
@@ -24,8 +24,11 @@ def renderPreview():
         return
     if fontSizeBox.text() == '':
         return
+
+    codeBox.setTabStopDistance(QFontMetricsF(codeBox.font()).horizontalAdvance(' ') * int(tabSizeDropdown.currentText()))
+
     code = codeBox.toPlainText()
-    lexer = get_lexer_by_name(langDropdown.currentText().lower())
+    lexer = get_lexer_by_name(langDropdown.currentText().lower(), tabsize=int(tabSizeDropdown.currentText()))
     theme = get_style_by_name(themeDropdown.currentText().lower())
     font = 'JetBrains Mono' # will change later
     fontSize = int(fontSizeBox.text())
@@ -68,16 +71,47 @@ def exportFile():
 
 settingsLayoutMaxWidth = 175
 settingsLayoutMaxHeight = 32
+settingsSize = QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight)
 codeBoxMaxWidth = 260
 codeBoxMaxHeight = 180
 exportLayoutMaxWidth = 175
 slash = '/' # or \\ if you're a windows user
 filePath = ''
 
+comboLeftMargin = 5
+
+fonts = [
+    QFontDatabase.addApplicationFont(':/fonts/JetBrainsMono.ttf')
+]
+
 # * ANCHOR GUI
 
 app = QApplication([])
 app.aboutToQuit.connect(exitHandler)
+app.setStyleSheet("""
+QWidget {
+    background-color: #2C3E50;
+}
+
+QPlainTextEdit {
+    background-color: #34495E;
+    border-radius: 10px;
+    padding: 2px;
+}
+
+QLineEdit {
+    background-color: #34495E;
+    border-radius: 10px;
+    padding: 2px;
+}
+
+QComboBox {
+    background-color: #34495E;
+    padding: 2px;
+    padding-left: 7px;
+    border-radius: 10px;
+}
+""") # TODO Make the combobox box round
 window = QWidget()
 window.setWindowTitle('Code Presenter')
 window.resize(1000, 500)
@@ -89,33 +123,28 @@ subMainLayout = QHBoxLayout()
 
 settingsLayout = QVBoxLayout()
 rendererLayout = QVBoxLayout()
+codeLayout = QVBoxLayout()
 exportLayout = QHBoxLayout()
 
 settingsLayout.addStretch()
 mainLayout.addLayout(subMainLayout)
-subMainLayout.addLayout(settingsLayout)
+subMainLayout.addLayout(codeLayout)
 subMainLayout.addLayout(rendererLayout)
+subMainLayout.addLayout(settingsLayout)
 mainLayout.addLayout(exportLayout)
 
 # * ANCHOR Settings widgets
 
 labelCode = QLabel('Code')
-labelCode.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
+labelCode.setMaximumSize(settingsSize)
 settingsLayout.addWidget(labelCode)
 
-codeBox = QPlainTextEdit()
-codeBox.setMaximumSize(QSize(codeBoxMaxWidth, codeBoxMaxHeight))
-codeBox.setPlaceholderText('Put your code here...')
-codeBox.textChanged.connect(renderPreview)
-settingsLayout.addWidget(codeBox)
-
 labelLang = QLabel('Language')
-labelLang.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
+labelLang.setMaximumSize(settingsSize)
 settingsLayout.addWidget(labelLang)
 
 langDropdown = QComboBox()
-langDropdown.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
-langDropdown.currentTextChanged.connect(renderPreview)
+langDropdown.setMaximumSize(settingsSize)
 # lang = list(get_all_lexers())
 # langlist = []
 # for i in range(len(lang)):
@@ -131,41 +160,58 @@ with open('Supported.txt', 'r') as supported:
             else:
                 langlist.append(line.strip())
 langDropdown.addItems(langlist)
-langDropdown.setCurrentText('Python')
 settingsLayout.addWidget(langDropdown)
+langDropdown.currentTextChanged.connect(renderPreview)
 
 labelTheme = QLabel('Theme')
-labelTheme.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
+labelTheme.setMaximumSize(settingsSize)
 settingsLayout.addWidget(labelTheme)
 
 themeDropdown = QComboBox()
-themeDropdown.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
-themeDropdown.currentTextChanged.connect(renderPreview)
+themeDropdown.setMaximumSize(settingsSize)
 theme = list(get_all_styles())
 themeDropdown.addItems(theme)
-themeDropdown.setCurrentText('one-dark')
 settingsLayout.addWidget(themeDropdown)
+themeDropdown.currentTextChanged.connect(renderPreview)
 
 checkboxShowNums = QCheckBox('   Show Number Lines')
 checkboxShowNums.clicked.connect(renderPreview)
-checkboxShowNums.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
+checkboxShowNums.setMaximumSize(settingsSize)
 settingsLayout.addWidget(checkboxShowNums)
 
 labelFontSize = QLabel('Font Size')
-labelFontSize.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
+labelFontSize.setMaximumSize(settingsSize)
 settingsLayout.addWidget(labelFontSize)
 
 fontSizeBox = QLineEdit()
 fontSizeBox.textChanged.connect(renderPreview)
 fontSizeBox.setValidator(QIntValidator())
-fontSizeBox.setText('12') # Default
-fontSizeBox.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
+fontSizeBox.setMaximumSize(settingsSize)
 settingsLayout.addWidget(fontSizeBox)
+
+labelTabSize = QLabel('Tab Size')
+labelTabSize.setMaximumSize(settingsSize)
+settingsLayout.addWidget(labelTabSize)
+
+tabSizeDropdown = QComboBox()
+tabSizeDropdown.addItems([ '2', '4' ])
+tabSizeDropdown.currentTextChanged.connect(renderPreview)
+settingsLayout.addWidget(tabSizeDropdown)
 
 # * ANCHOR Render Widget
 
 codeBlock = QWebEngineView()
 rendererLayout.addWidget(codeBlock)
+
+# * ANCHOR Code Widget
+
+codeBox = QPlainTextEdit()
+# codeBox.setMaximumSize(QSize(codeBoxMaxWidth, codeBoxMaxHeight))
+codeBox.setFont(QFont('JetBrains Mono', 14))
+codeBox.setTabStopDistance(QFontMetricsF(codeBox.font()).horizontalAdvance(' ') * int(tabSizeDropdown.currentText()))
+codeBox.setPlaceholderText('Put your code here...')
+codeBox.textChanged.connect(renderPreview)
+codeLayout.addWidget(codeBox)
 
 # * ANCHOR Export Widgets
 
@@ -201,7 +247,11 @@ exportLayout.addWidget(exportButton)
 # codeBox.setText("""def somefunc(param1, param2):
 #     print(f'param1: {0}, param2: {1}').format(param1, param2)""")
 codeBox.setPlainText("""def somefunc(param1, param2):
-    print(f'param1: {0}, param2: {1}').format(param1, param2)""")
+\tprint(f'param1: {0}, param2: {1}').format(param1, param2)""")
+fontSizeBox.setText('12')
+langDropdown.setCurrentText('Python')
+themeDropdown.setCurrentText('one-dark')
+tabSizeDropdown.setCurrentText('4')
 
 window.setLayout(mainLayout)
 window.show()
