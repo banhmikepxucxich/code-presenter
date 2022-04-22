@@ -2,10 +2,10 @@
 # by Hwoai#0593 on discord
 # 17 - 18 April 2022
 
-from PyQt6.QtWidgets import QLabel, QPushButton, QLineEdit, QComboBox, QFileDialog, QCheckBox
+from PyQt6.QtWidgets import QLabel, QPushButton, QLineEdit, QComboBox, QFileDialog, QCheckBox, QPlainTextEdit
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtGui import QIntValidator
+from PyQt6.QtGui import QIntValidator, QFontDatabase, QFont, QFontMetricsF
 from PyQt6.QtCore import QSize
 
 from pygments.lexers import get_lexer_by_name, get_all_lexers
@@ -20,11 +20,11 @@ def exitHandler():
     exit(0)
 
 def renderPreview():
-    if codeBox.text().strip() == '':
+    if codeBox.toPlainText().strip() == '':
         return
     if fontSizeBox.text() == '':
         return
-    code = codeBox.text()
+    code = codeBox.toPlainText()
     lexer = get_lexer_by_name(langDropdown.currentText().lower())
     theme = get_style_by_name(themeDropdown.currentText().lower())
     font = 'JetBrains Mono' # will change later
@@ -40,7 +40,7 @@ def filePathDialog():
     print('File path added, path=%s' % filePath)
 
 def exportFile():
-    if codeBox.text().strip() == '':
+    if codeBox.toPlainText().strip() == '':
         labelFilePath.setText('Empty CodeBox.')
         return
     if filePath.strip() == '/':
@@ -49,7 +49,7 @@ def exportFile():
     if filePath.strip() == '':
         labelFilePath.setText('Empty file path.')
         return
-    code = codeBox.text()
+    code = codeBox.toPlainText()
     lexer = get_lexer_by_name(langDropdown.currentText().lower())
     theme = get_style_by_name(themeDropdown.currentText().lower())
     font = 'JetBrains Mono' # will change later
@@ -68,6 +68,8 @@ def exportFile():
 
 settingsLayoutMaxWidth = 175
 settingsLayoutMaxHeight = 32
+codeBoxMaxWidth = 260
+codeBoxMaxHeight = 180
 exportLayoutMaxWidth = 175
 slash = '/' # or \\ if you're a windows user
 filePath = ''
@@ -97,12 +99,13 @@ mainLayout.addLayout(exportLayout)
 
 # * ANCHOR Settings widgets
 
-labelCode = QLabel('Code (Paste code here)')
+labelCode = QLabel('Code')
 labelCode.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
 settingsLayout.addWidget(labelCode)
 
-codeBox = QLineEdit()
-codeBox.setMaximumSize(QSize(settingsLayoutMaxWidth, settingsLayoutMaxHeight))
+codeBox = QPlainTextEdit()
+codeBox.setMaximumSize(QSize(codeBoxMaxWidth, codeBoxMaxHeight))
+codeBox.setPlaceholderText('Put your code here...')
 codeBox.textChanged.connect(renderPreview)
 settingsLayout.addWidget(codeBox)
 
@@ -195,7 +198,9 @@ exportLayout.addWidget(exportButton)
 
 # * Base settings
 
-codeBox.setText("""def somefunc(param1, param2):
+# codeBox.setText("""def somefunc(param1, param2):
+#     print(f'param1: {0}, param2: {1}').format(param1, param2)""")
+codeBox.setPlainText("""def somefunc(param1, param2):
     print(f'param1: {0}, param2: {1}').format(param1, param2)""")
 
 window.setLayout(mainLayout)

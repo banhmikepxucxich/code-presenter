@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout
 from PyQt6.QtWidgets import QPushButton, QPlainTextEdit
 from PyQt6.QtGui import QFontMetrics, QFont, QFontDatabase
-from PyQt6.QtCore import QFile
 
 def example_function():
     print(textbox.toPlainText().expandtabs(4))
