@@ -6,12 +6,12 @@ from PyQt6.QtWidgets import QLabel, QPushButton, QLineEdit, QComboBox, QFileDial
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtGui import QIntValidator, QFontDatabase, QFont, QFontMetricsF
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtCore import QSize
 
 from pygments.lexers import get_lexer_by_name, get_all_lexers
 from pygments.styles import get_style_by_name, get_all_styles
 
-from core import core
+from core import *
 
 # * ANCHOR Functions
 
@@ -33,7 +33,7 @@ def renderPreview():
     font = 'JetBrains Mono' # will change later
     fontSize = int(fontSizeBox.text())
     showNumLines = checkboxShowNums.isChecked()
-    htmlProcessing = core(code, lexer, theme, font, fontSize, showNumLines)
+    htmlProcessing = imgRender(code, lexer, theme, font, fontSize, showNumLines)
     codeBlock.setHtml(htmlProcessing.getHtml())
 
 def filePathDialog():
@@ -60,7 +60,7 @@ def exportFile():
     name = fileNameBox.text()
     fontSize = int(fontSizeBox.text())
     showNumLines = checkboxShowNums.isChecked()
-    imageRenderer = core(code, lexer, theme, font, fontSize, showNumLines)
+    imageRenderer = imgRender(code, lexer, theme, font, fontSize, showNumLines)
     if choice == 'png':
         imageRenderer.exportPNG(name, filePath)
     if choice == 'html':
@@ -127,6 +127,10 @@ QCheckBox {
     border-radius: 10px;
     padding: 2px;
 }
+
+QLabel, QCheckBox, QPushButton, QComboBox, QLineEdit {
+    font-family: 'JetBrains Mono', monospace;
+}
 """) # TODO Make the combobox box round
 window = QWidget()
 window.setWindowTitle('Code Presenter')
@@ -136,24 +140,34 @@ window.resize(1000, 500)
 
 mainLayout = QVBoxLayout()
 subMainLayout = QHBoxLayout()
+subMainRightLayout = QVBoxLayout()
 
 settingsLayout = QVBoxLayout()
+appSettingsLayout = QVBoxLayout()
 rendererLayout = QVBoxLayout()
 codeLayout = QVBoxLayout()
 exportLayout = QHBoxLayout()
 
 settingsLayout.addStretch()
+appSettingsLayout.addStretch()
 mainLayout.addLayout(subMainLayout)
 subMainLayout.addLayout(codeLayout)
 subMainLayout.addLayout(rendererLayout)
-subMainLayout.addLayout(settingsLayout)
+subMainLayout.addLayout(subMainRightLayout)
+subMainRightLayout.addLayout(settingsLayout)
+subMainRightLayout.addLayout(appSettingsLayout)
 mainLayout.addLayout(exportLayout)
 
 # * ANCHOR Settings widgets
 
-labelCode = QLabel('Code')
-labelCode.setMaximumSize(settingsSize)
-settingsLayout.addWidget(labelCode)
+labelSettings = QLabel('Settings')
+labelSettings.setStyleSheet("""
+QWidget {
+    font-size: 24px;
+    color: #F1C40F;
+}
+""")
+settingsLayout.addWidget(labelSettings)
 
 labelLang = QLabel('Language')
 labelLang.setMaximumSize(settingsSize)
@@ -190,7 +204,7 @@ themeDropdown.addItems(theme)
 settingsLayout.addWidget(themeDropdown)
 themeDropdown.currentTextChanged.connect(renderPreview)
 
-checkboxShowNums = QCheckBox('   Show Number Lines')
+checkboxShowNums = QCheckBox('Show Number Lines')
 checkboxShowNums.clicked.connect(renderPreview)
 checkboxShowNums.setMaximumSize(settingsSize)
 settingsLayout.addWidget(checkboxShowNums)
@@ -213,6 +227,27 @@ tabSizeDropdown = QComboBox()
 tabSizeDropdown.addItems([ '2', '4' ])
 tabSizeDropdown.currentTextChanged.connect(renderPreview)
 settingsLayout.addWidget(tabSizeDropdown)
+
+# * ANCHOR App Settings Widgets
+
+labelAppSettings = QLabel('App Settings')
+labelAppSettings.setStyleSheet("""
+QWidget {
+    font-size: 24px;
+    color: #F1C40F;
+}
+""")
+appSettingsLayout.addWidget(labelAppSettings)
+
+
+labelAppTheme = QLabel('App theme')
+labelAppTheme.setMaximumSize(settingsSize)
+appSettingsLayout.addWidget(labelAppTheme)
+
+appThemeDropdown = QComboBox()
+appThemeDropdown.addItems(['test'])
+appThemeDropdown.setMaximumSize(settingsSize)
+appSettingsLayout.addWidget(appThemeDropdown)
 
 # * ANCHOR Render Widget
 

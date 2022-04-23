@@ -12,7 +12,7 @@ from html2image import Html2Image
 import os
 import math
 
-class core:
+class imgRender:
     def __init__(self, code, lexer, theme, font, fontSize, showNumbers):
         # Init configurations
         self.code = code
@@ -80,3 +80,11 @@ class core:
 
     def getHtml(self):
         return self.html
+
+class themeHandler:
+
+    def __init__(self, theme):
+        self.theme = theme
+
+    def getAppStyle():
+        return 'stylesheet here'
