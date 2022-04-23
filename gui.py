@@ -35,7 +35,7 @@ def renderPreview():
     showNumLines = checkboxShowNums.isChecked()
     fontFormat = 'ttf' # TODO Render Html Font
     htmlProcessing = imgRender(code, lexer, theme, font, fontSize, showNumLines, fontFormat)
-    codeBlock.setHtml(htmlProcessing.getHtml())
+    codeBlock.setHtml(htmlProcessing.returnHtml())
 
 def filePathDialog():
     global filePath
@@ -80,7 +80,7 @@ exportLayoutMaxWidth = 175
 slash = '/' # or \\ if you're a windows user
 filePath = ''
 
-appCss = themeHandler('windows98').getAppStyle()
+appCss = themeHandler('default').getAppStyle()
 
 comboLeftMargin = 5
 

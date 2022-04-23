@@ -8,6 +8,7 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 from pygments.style import Style
 from html2image import Html2Image
+from bs4 import BeautifulSoup
 
 import os
 import math
@@ -39,7 +40,7 @@ class imgRender:
         self.formatter = HtmlFormatter(style=self.theme, full=True, linenos=self.showNumbers)
         self.html = highlight(self.code, self.lexer, self.formatter)
 
-    def drawImage(self): # ! No longer used
+    def drawImage(self): # ! No longer used now uses webview.
         self.codeList = self.code.splitlines()
         self.codeListLen = []
 
@@ -68,7 +69,7 @@ class imgRender:
         self.name = name
         self.filepath = filepath
 
-        Html2Image().screenshot(html_str=self.html, save_as=self.name + '.png', size=(self.imgLen, self.imgWidth))
+        Html2Image().screenshot(html_str=self.injectCss(), save_as=self.name + '.png', size=(self.imgLen, self.imgWidth))
             
         # * Move file or python will complain
 
@@ -79,8 +80,14 @@ class imgRender:
         self.display.crop((0, 0, self.imgLen, 0))
         self.display.save(self.filepath + self.name + '.png')
 
-    def getHtml(self):
+    def getHtml(self): # ! No longer used, use returnHtml for injected font into html doc.
         return self.html
+
+    def returnHtml(self):
+        self.soup = BeautifulSoup(self.html, 'html.parser')
+        self.soup.select_one('style').append(self.additional_css)
+
+        return str(self.soup)
 
 class themeHandler:
     def __init__(self, theme):
