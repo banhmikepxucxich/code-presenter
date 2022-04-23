@@ -13,7 +13,7 @@ import os
 import math
 
 class imgRender:
-    def __init__(self, code, lexer, theme, font, fontSize, showNumbers):
+    def __init__(self, code, lexer, theme, font, fontSize, showNumbers, fontFormat):
         # Init configurations
         self.code = code
         self.lexer = lexer
@@ -21,11 +21,12 @@ class imgRender:
         self.font = font
         self.fontSize = fontSize
         self.showNumbers = showNumbers
+        self.fontFormat = fontFormat
 
         self.additional_css = """
             @font-face {{
                 font-family: '{0}', monospace;
-                src: url({1});
+                src: url({1}) format({3});
                 font-size: {2}px;
             }}
 
@@ -34,7 +35,7 @@ class imgRender:
                 font-size: {2}px;
             }}
         """
-        self.additional_css = self.additional_css.format(self.font, './fonts/' + self.font.replace(' ', ''), self.fontSize)
+        self.additional_css = self.additional_css.format(self.font, './fonts/' + self.font.replace(' ', '') + '.' + self.fontFormat, self.fontSize, self.fontFormat)
         self.formatter = HtmlFormatter(style=self.theme, full=True, linenos=self.showNumbers)
         self.html = highlight(self.code, self.lexer, self.formatter)
 
@@ -82,9 +83,10 @@ class imgRender:
         return self.html
 
 class themeHandler:
-
     def __init__(self, theme):
         self.theme = theme
 
-    def getAppStyle():
-        return 'stylesheet here'
+    def getAppStyle(self):
+        self.cssFile = open('themes/' + self.theme + '.css')
+        self.css = self.cssFile.read()
+        return self.css

@@ -1,0 +1,47 @@
+QWidget {
+    background-color: #2C3E50;
+}
+
+QPlainTextEdit {
+    border-radius: 10px;
+    padding: 2px;
+}
+
+QLineEdit {
+    border-radius: 10px;
+    padding: 2px;
+}
+
+QComboBox {
+    padding: 2px;
+    padding-left: 7px;
+    border-radius: 10px;
+}
+
+QPushButton {
+    border-radius: 10px;
+    padding: 2px;
+}
+
+QPushButton:pressed {
+    background-color: #3498DB;
+}
+
+QCheckBox {
+    border-radius: 10px;
+    padding: 2px;
+}
+
+QCheckBox, QPushButton, QComboBox, QLineEdit, QPlainTextEdit {
+    background-color: #34495E;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+QLabel {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+QWidget#Title {
+    font-size: 24px;
+    color: #F1C40F;
+}

@@ -33,7 +33,8 @@ def renderPreview():
     font = 'JetBrains Mono' # will change later
     fontSize = int(fontSizeBox.text())
     showNumLines = checkboxShowNums.isChecked()
-    htmlProcessing = imgRender(code, lexer, theme, font, fontSize, showNumLines)
+    fontFormat = 'ttf' # TODO Render Html Font
+    htmlProcessing = imgRender(code, lexer, theme, font, fontSize, showNumLines, fontFormat)
     codeBlock.setHtml(htmlProcessing.getHtml())
 
 def filePathDialog():
@@ -60,7 +61,8 @@ def exportFile():
     name = fileNameBox.text()
     fontSize = int(fontSizeBox.text())
     showNumLines = checkboxShowNums.isChecked()
-    imageRenderer = imgRender(code, lexer, theme, font, fontSize, showNumLines)
+    fontFormat = 'ttf'
+    imageRenderer = imgRender(code, lexer, theme, font, fontSize, showNumLines, fontFormat)
     if choice == 'png':
         imageRenderer.exportPNG(name, filePath)
     if choice == 'html':
@@ -78,6 +80,8 @@ exportLayoutMaxWidth = 175
 slash = '/' # or \\ if you're a windows user
 filePath = ''
 
+appCss = themeHandler('windows98').getAppStyle()
+
 comboLeftMargin = 5
 
 fonts = [
@@ -88,50 +92,7 @@ fonts = [
 
 app = QApplication([])
 app.aboutToQuit.connect(exitHandler)
-app.setStyleSheet("""
-QWidget {
-    background-color: #2C3E50;
-}
-
-QPlainTextEdit {
-    background-color: #34495E;
-    border-radius: 10px;
-    padding: 2px;
-}
-
-QLineEdit {
-    background-color: #34495E;
-    border-radius: 10px;
-    padding: 2px;
-}
-
-QComboBox {
-    background-color: #34495E;
-    padding: 2px;
-    padding-left: 7px;
-    border-radius: 10px;
-}
-
-QPushButton {
-    background-color: #34495E;
-    border-radius: 10px;
-    padding: 2px;
-}
-
-QPushButton:pressed {
-    background-color: #3498DB;
-}
-
-QCheckBox {
-    background-color: #34495E;
-    border-radius: 10px;
-    padding: 2px;
-}
-
-QLabel, QCheckBox, QPushButton, QComboBox, QLineEdit {
-    font-family: 'JetBrains Mono', monospace;
-}
-""") # TODO Make the combobox box round
+app.setStyleSheet(appCss) # TODO Make the combobox box round
 window = QWidget()
 window.setWindowTitle('Code Presenter')
 window.resize(1000, 500)
@@ -161,12 +122,7 @@ mainLayout.addLayout(exportLayout)
 # * ANCHOR Settings widgets
 
 labelSettings = QLabel('Settings')
-labelSettings.setStyleSheet("""
-QWidget {
-    font-size: 24px;
-    color: #F1C40F;
-}
-""")
+labelSettings.setObjectName('Title')
 settingsLayout.addWidget(labelSettings)
 
 labelLang = QLabel('Language')
@@ -231,12 +187,7 @@ settingsLayout.addWidget(tabSizeDropdown)
 # * ANCHOR App Settings Widgets
 
 labelAppSettings = QLabel('App Settings')
-labelAppSettings.setStyleSheet("""
-QWidget {
-    font-size: 24px;
-    color: #F1C40F;
-}
-""")
+labelAppSettings.setObjectName('Title')
 appSettingsLayout.addWidget(labelAppSettings)
 
 
