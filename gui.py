@@ -111,6 +111,22 @@ QComboBox {
     padding-left: 7px;
     border-radius: 10px;
 }
+
+QPushButton {
+    background-color: #34495E;
+    border-radius: 10px;
+    padding: 2px;
+}
+
+QPushButton:pressed {
+    background-color: #3498DB;
+}
+
+QCheckBox {
+    background-color: #34495E;
+    border-radius: 10px;
+    padding: 2px;
+}
 """) # TODO Make the combobox box round
 window = QWidget()
 window.setWindowTitle('Code Presenter')
