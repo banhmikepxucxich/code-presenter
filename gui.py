@@ -238,7 +238,7 @@ exportLayout.addWidget(exportButton)
 # * Base settings
 
 codeBox.setPlainText("""def somefunc(param1, param2):
-\tprint(f'param1: {0}, param2: {1}').format(param1, param2)""")
+\tprint(f'param1: {0}, param2: {1}'.format(param1, param2))""")
 fontSizeBox.setText('12')
 langDropdown.setCurrentText('Python')
 themeDropdown.setCurrentText('one-dark')
