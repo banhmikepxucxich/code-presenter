@@ -1,0 +1,8 @@
+# requirements.txt shenanigans
+
+PyQt6
+PyQt6-WebEngine
+pygments
+pillow
+html2image
+bs4

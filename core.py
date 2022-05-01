@@ -1,6 +1,4 @@
-# Code presenter core
-# by Hwoai#0593
-# 17 - 18 April 2022
+# use carbon bruh -> https://github.com/carbon-app/carbon
 
 from PIL import Image
 from pygments import highlight

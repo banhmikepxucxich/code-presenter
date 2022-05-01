@@ -1,7 +1,3 @@
-# Code presenter gui
-# by Hwoai#0593 on discord
-# 17 - 18 April 2022
-
 from PyQt6.QtWidgets import QLabel, QPushButton, QLineEdit, QComboBox, QFileDialog, QCheckBox, QPlainTextEdit
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtWebEngineWidgets import QWebEngineView
