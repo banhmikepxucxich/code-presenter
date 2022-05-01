@@ -100,13 +100,62 @@ body .vi { color: #E06C75 } /* Name.Variable.Instance */
 body .vm { color: #E06C75 } /* Name.Variable.Magic */
 body .il { color: #D19A66 } /* Literal.Number.Integer.Long */
 
+body {
+  background-color: transparent;
+}
+
+body .box {
+  background-color: #282C34;
+  width: fit-content;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-top: 6px;
+  padding-bottom: 2px;
+  border-radius: 10px;
+
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.5);
+}
+
+body .dot {
+  height: 9px;
+  width: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+body .btn-g {
+  background-color: #00ca4e;
+}
+
+body .btn-y {
+  background-color: #ffbd44;
+}
+
+body .btn-r {
+  background-color: #ff605c;
+}
+
+body .bar {
+  margin: 0px;
+  padding: 0px;
+  margin-top: 2px;
+  margin-bottom: -8px;
+}
+
   </style>
 </head>
 <body>
 <h2></h2>
 
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">somefunc</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
-	<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;param1: </span><span class="si">{</span><span class="mi">0</span><span class="si">}</span><span class="s1">, param2: </span><span class="si">{</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">)</span>
-</pre></div>
+<div class="box">
+  <div class="bar">
+    <span class="dot btn-r"></span>
+    <span class="dot btn-y"></span>
+    <span class="dot btn-g"></span>
+  </div>
+  <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">somefunc</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;param1: </span><span class="si">{</span><span class="mi">0</span><span class="si">}</span><span class="s1">, param2: </span><span class="si">{</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">)</span>
+  </pre></div>
+</div>
 </body>
 </html>

@@ -9,8 +9,6 @@ fonts = [
     QFontDatabase.addApplicationFont(':/fonts/JetBrainsMono.ttf')
 ]
 
-test = open('test.html')
-
 app = QApplication([])
 window = QWidget()
 window.setWindowTitle('example app :DDDDD')

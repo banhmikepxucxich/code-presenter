@@ -33,11 +33,13 @@ QCheckBox {
 }
 
 QCheckBox, QPushButton, QComboBox, QLineEdit, QPlainTextEdit {
+    color: #f0ffff;
     background-color: #34495E;
     font-family: 'JetBrains Mono', monospace;
 }
 
 QLabel {
+    color: #f0ffff;
     font-family: 'JetBrains Mono', monospace;
 }
 

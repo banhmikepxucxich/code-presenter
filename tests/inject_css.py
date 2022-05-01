@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-doc = open('asd.html', 'r')
+doc = open('../test.html', 'r')
 doc = doc.read()
 print(doc)
 soup = BeautifulSoup(doc, 'html.parser')

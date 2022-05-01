@@ -10,7 +10,7 @@ window.setWindowTitle('code view test')
 layout = QVBoxLayout()
 
 code = QWebEngineView()
-html = codecs.open('test.html')
+html = codecs.open('../test.html')
 code.setHtml(html.read())
 layout.addWidget(code)
 
