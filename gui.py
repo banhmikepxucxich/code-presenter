@@ -127,10 +127,6 @@ settingsLayout.addWidget(labelLang)
 
 langDropdown = QComboBox()
 langDropdown.setMaximumSize(settingsSize)
-# lang = list(get_all_lexers())
-# langlist = []
-# for i in range(len(lang)):
-#     langlist.append(lang[i][0])
 langlist = []
 with open('Supported.txt', 'r') as supported:
     for line in supported:
@@ -204,7 +200,6 @@ rendererLayout.addWidget(codeBlock)
 # * ANCHOR Code Widget
 
 codeBox = QPlainTextEdit()
-# codeBox.setMaximumSize(QSize(codeBoxMaxWidth, codeBoxMaxHeight))
 codeBox.setFont(QFont('JetBrains Mono', 14))
 codeBox.setTabStopDistance(QFontMetricsF(codeBox.font()).horizontalAdvance(' ') * int(tabSizeDropdown.currentText()))
 codeBox.setPlaceholderText('Put your code here...')
@@ -242,8 +237,6 @@ exportLayout.addWidget(exportButton)
 
 # * Base settings
 
-# codeBox.setText("""def somefunc(param1, param2):
-#     print(f'param1: {0}, param2: {1}').format(param1, param2)""")
 codeBox.setPlainText("""def somefunc(param1, param2):
 \tprint(f'param1: {0}, param2: {1}').format(param1, param2)""")
 fontSizeBox.setText('12')

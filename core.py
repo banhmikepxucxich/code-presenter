@@ -80,24 +80,6 @@ class imgRender:
         self.formatter = HtmlFormatter(style=self.theme, full=True, linenos=self.showNumbers)
         self.html = highlight(self.code, self.lexer, self.formatter)
 
-    def drawImage(self): # ! No longer used now uses webview.
-        self.codeList = self.code.splitlines()
-        self.codeListLen = []
-
-        for i in range(len(self.codeList)):
-            self.codeListLen.append(len(self.codeList[i]))
-
-        self.imgLen = math.ceil((max(self.codeListLen) * self.fontSize) * (7/10))
-        self.imgWidth = math.ceil((len(self.codeList) * self.fontSize * 1.3) + self.fontSize + 5)
-
-        Html2Image().screenshot(html_str=self.html, save_as='display.png', size=(self.imgLen, self.imgWidth))
-
-        self.display = Image.open('display.png')
-        self.display = self.display.crop(self.display.getbbox())
-        self.display.crop((0, 0, self.imgLen, 0))
-        self.display = self.display.resize((round(self.display.size[0]*0.5), round(self.display.size[1]*0.5)))
-        self.display.save('display.png')
-
     def exportHtml(self, name, filepath):
         self.name = name
         self.filepath = filepath
@@ -109,16 +91,7 @@ class imgRender:
         self.name = name
         self.filepath = filepath
 
-        # self.imgLen = math.ceil((max(self.codeListLen) * self.fontSize) * (7/10))
-        # self.imgWidth = math.ceil((len(self.codeList) * self.fontSize * 1.3) + self.fontSize + 5)
-
-        # self.codeList = self.code.splitlines()
-        # self.codeListLen = []
-
-        # for i in range(len(self.codeList)):
-        #     self.codeListLen.append(len(self.codeList[i]))
-
-        Html2Image().screenshot(html_str=self.returnHtml(), save_as=self.name + '.png') # , size=(self.imgLen, self.imgWidth)
+        Html2Image().screenshot(html_str=self.returnHtml(), save_as=self.name + '.png')
             
         # * Move file or python will complain
 
@@ -127,9 +100,6 @@ class imgRender:
         self.display = Image.open(self.filepath + self.name + '.png')
         self.display = self.display.crop(self.display.getbbox())
         self.display.save(self.filepath + self.name + '.png')
-
-    def getHtml(self): # ! No longer used, use returnHtml for injected font into html doc.
-        return self.html
 
     def returnHtml(self):
         self.soup = BeautifulSoup(self.html, 'html.parser')
